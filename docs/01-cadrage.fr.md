@@ -36,25 +36,22 @@ Avant toute modélisation de données, cette phase vise à traduire les compéte
 
 | Réf. | Donnée requise | Source | Calcul |
 |---|---|---|---|
-| EX-02 | Unités ayant répondu (`reponse` = Oui) / total unités, par région | `Fait_Saisie` ⨝ `Dim_Unite_Enquetee` ⨝ `Dim_Région` | Agrégat SQL |
-| EX-03 | Unités corrigées / total ayant répondu, par région | `Fait_Qualité` ⨝ `Fait_Saisie` ⨝ `Dim_Région` | Agrégat SQL |
-| EX-04 | Bornes IQR et Z-score par strate région × type | `Fait_Qualité.methode_detection` | SQL + Python (scipy) |
+| EX-02 | Unités avec `non_reponse` = Non / total unités, par région | `Fait_Qualite` ⨝ `Dim_Unite_Enquetee` ⨝ `Dim_Region` | Agrégat SQL |
+| EX-03 | Unités avec `methode_imputation` renseignée / total unités ayant répondu, par région | `Fait_Qualite.methode_imputation` | Agrégat SQL |
+| EX-04 | Bornes IQR et Z-score sur `ecart_gps_metres` (Fait_Suivi_Terrain) et `nb_erreurs_capi` (Fait_Qualite), par strate région × type d'unité | `Fait_Suivi_Terrain`, `Fait_Qualite` | SQL + Python (scipy) |
 | EX-05 | Rang de chaque région sur l'indice composite | Vue SQL sur l'indice composite | `RANK()` |
-| EX-06 | Taux de réponse par semaine/mois | `Fait_Saisie.date_saisie` ⨝ `Dim_Calendrier` | Série temporelle SQL/DAX |
-| EX-07 | Indice = f(réponse, retard, anomalie) | `Fait_Saisie`, `Fait_Suivi_Terrain`, `Fait_Qualité` | Formule pondérée (Phase 4) |
+| EX-06 | Évolution des indicateurs par trimestre | `Fait_Suivi_Terrain.date_id` / `Fait_Qualite.date_id` ⨝ `Dim_Calendrier` | Série temporelle SQL/DAX |
+| EX-07 | Indice = f(taux de réponse, taux de retard, taux d'anomalie) — taux de retard = % unités avec `nb_tentatives` ≥ 3 | `Fait_Qualite`, `Fait_Suivi_Terrain` | Formule pondérée (Phase 4) |
 | EX-08–11 | Restitution des indicateurs ci-dessus | Power BI sur SQLite/Azure SQL | DAX + Power Query |
 
 ## 1.5 Décisions de cadrage actées
 
 | Décision | Choix retenu | Raison |
 |---|---|---|
-| Granularité du suivi terrain | Compteur `nbre_tentatives` par unité | Aucune exigence ne demande l'historique détaillé par visite |
-| Simulation temporelle | Instantané figé à J+100 (`CURRENT_DAY_OFFSET`) | Uniquement pour la démonstration portfolio |
-| Calendrier ouvrable | Week-ends exclus uniquement (v1) | Raffinement (jours fériés) reporté |
-| Méthodes d'outliers | IQR **et** Z-score, en parallèle | Exigence EX-04 explicite |
-| Indice composite | 3 composantes : réponse, retard, anomalie | Aligné strictement sur EX-07 |
-| Pondération de l'indice | À trancher en Phase 4 | Décision différée, assumée |
-
-## 1.6 Livrable de fin de phase
-
-Référentiel d'exigences numérotées (EX-01 à EX-12) et matrice de traçabilité exigence → donnée → source, servant de référence de contrôle pour la Phase 2.
+| Schéma de référence | Schéma réel validé (Dim_Superviseur, Dim_Region, Dim_Type_Unite, Dim_Enqueteur, Dim_Unite_Enquetee, Dim_Calendrier, Fait_Allocation_Ressources, Fait_Suivi_Terrain, Fait_Qualite) | Remplace les hypothèses initiales (`Fait_Saisie` n'existe pas) |
+| Lien temporel sur les faits | Ajout d'une clé étrangère `date_id` sur `Fait_Suivi_Terrain` et `Fait_Qualite` | Nécessaire pour EX-06 (tendance dans le temps), absente du schéma initial |
+| Variable de détection d'anomalies | `ecart_gps_metres` **et** `nb_erreurs_capi`, en parallèle | Pas de variable de montant disponible — le système surveille la qualité opérationnelle, pas les données d'investissement |
+| Méthodes d'outliers | IQR **et** Z-score, en parallèle, par strate région × type d'unité | Exigence EX-04 explicite |
+| Définition du taux de retard | % d'unités avec `nb_tentatives` ≥ 3 | Aucune paire de dates (assignation/fin) disponible pour un calcul de retard réel ; seuil ajustable en Phase 4 |
+| Indice composite | 3 composantes : réponse, retard (proxy tentatives), anomalie | Aligné strictement sur EX-07 |
+| Calendrier ouvrable | Week-ends exclus uniquement (version simplifiée) | Raffinement possible ultérieurement : exclusion des jours fériés marocains |
