@@ -36,24 +36,25 @@ Before any data modeling work, this phase translates the skills to be demonstrat
 
 | Ref. | Required data | Source | Calculation |
 |---|---|---|---|
-| REQ-02 | Units responded / total units, by region | `Fait_Saisie` ⨝ `Dim_Unite_Enquetee` ⨝ `Dim_Région` | SQL aggregate |
-| REQ-03 | Units corrected / total responded, by region | `Fait_Qualité` ⨝ `Fait_Saisie` ⨝ `Dim_Région` | SQL aggregate |
-| REQ-04 | IQR and Z-score thresholds by region × unit-type stratum | `Fait_Qualité.methode_detection` | SQL + Python (scipy) |
+| REQ-02 | Units with `non_reponse` = No / total units, by region | `Fait_Qualite` ⨝ `Dim_Unite_Enquetee` ⨝ `Dim_Region` | SQL aggregate |
+| REQ-03 | Units with `methode_imputation` populated / total units that responded, by region | `Fait_Qualite.methode_imputation` | SQL aggregate |
+| REQ-04 | IQR and Z-score thresholds on `ecart_gps_metres` (Fait_Suivi_Terrain) and `nb_erreurs_capi` (Fait_Qualite), by region × unit-type stratum | `Fait_Suivi_Terrain`, `Fait_Qualite` | SQL + Python (scipy) |
 | REQ-05 | Region rank on composite index | SQL view on composite index | `RANK()` |
-| REQ-06 | Response rate by week/month | `Fait_Saisie.date_saisie` ⨝ `Dim_Calendrier` | SQL/DAX time series |
-| REQ-07 | Index = f(response, delay, anomaly) | `Fait_Saisie`, `Fait_Suivi_Terrain`, `Fait_Qualité` | Weighted formula (Phase 4) |
+| REQ-06 | Indicator trends by quarter | `Fait_Suivi_Terrain.date_id` / `Fait_Qualite.date_id` ⨝ `Dim_Calendrier` | SQL/DAX time series |
+| REQ-07 | Index = f(response rate, delay rate, anomaly rate) — delay rate = % units with `nb_tentatives` ≥ 3 | `Fait_Qualite`, `Fait_Suivi_Terrain` | Weighted formula (Phase 4) |
 | REQ-08–11 | Reporting of the above indicators | Power BI on SQLite/Azure SQL | DAX + Power Query |
 
 ## 1.5 Scoping decisions
 
 | Decision | Choice made | Rationale |
 |---|---|---|
-| Field-monitoring granularity | `nbre_tentatives` counter per unit | No requirement calls for a detailed per-visit history |
-| Time simulation | Fixed snapshot at day 100 (`CURRENT_DAY_OFFSET`) | Only for portfolio demonstration |
-| Working-day calendar | Weekends excluded only (v1) | Public holidays deferred as a future refinement |
-| Outlier methods | IQR **and** Z-score, computed in parallel | Explicit requirement REQ-04 |
-| Composite index | 3 components: response, delay, anomaly | Strictly aligned with REQ-07 |
-| Index weighting | To be decided in Phase 4 | Deliberately deferred decision |
+| Reference schema | Validated real schema (Dim_Superviseur, Dim_Region, Dim_Type_Unite, Dim_Enqueteur, Dim_Unite_Enquetee, Dim_Calendrier, Fait_Allocation_Ressources, Fait_Suivi_Terrain, Fait_Qualite) | Replaces initial assumptions (`Fait_Saisie` does not exist) |
+| Time link on fact tables | Added a `date_id` foreign key on `Fait_Suivi_Terrain` and `Fait_Qualite` | Required for REQ-06 (trends over time), missing from the initial schema |
+| Anomaly-detection variable | `ecart_gps_metres` **and** `nb_erreurs_capi`, in parallel | No monetary amount variable available — the system monitors operational quality, not investment data |
+| Outlier methods | IQR **and** Z-score, in parallel, by region × unit-type stratum | Explicit requirement REQ-04 |
+| Delay-rate definition | % of units with `nb_tentatives` ≥ 3 | No assignment/completion date pair available for a true delay calculation; threshold adjustable in Phase 4 |
+| Composite index | 3 components: response, delay (attempts proxy), anomaly | Strictly aligned with REQ-07 |
+| Working-day calendar | Weekends excluded only (simplified version) | Future refinement possible: exclude Moroccan public holidays |
 
 ## 1.6 End-of-phase deliverable
 
