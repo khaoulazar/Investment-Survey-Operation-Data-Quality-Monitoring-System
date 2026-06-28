@@ -2,11 +2,11 @@
 
 ## 2.1 Objective
 
-Based on the requirements and decisions made in Phase 1, this phase formalizes a complete, constrained data schema: tables, types, primary keys, foreign keys, and real cardinalities — with no ambiguity. The schema must be directly translatable into SQL DDL (Phase 3), with no missing column or poorly defined relationship.
+Based on the requirements and decisions made in Phase 1, this phase formalizes a complete, constrained data schema: tables, types, primary keys, foreign keys, and real cardinalities. The schema is directly translatable into SQL DDL (Phase 3), with no missing column or poorly defined relationship.
 
 ## 2.2 Structuring principle
 
-Star schema: `Dim_Unite_Enquetee` is the **central filter table**, surrounded by four descriptive dimensions (`Dim_Region`, `Dim_Type_Unite`, `Dim_Enqueteur`, `Dim_Calendrier`) and two fact tables in a **strict 1:1 relationship** with it (`Fait_Suivi_Terrain`, `Fait_Qualite`) — each representing the current monitoring/quality state of a unit, not an event history. A seventh dimension (`Dim_Superviseur`) frames `Dim_Region`, and an additional fact table (`Fait_Allocation_Ressources`) links logistical resources to the region.
+Star schema: `Dim_Unite_Enquetee` is the **central filter table**, surrounded by four descriptive dimensions (`Dim_Region`, `Dim_Type_Unite`, `Dim_Enqueteur`, `Dim_Calendrier`) and two fact tables in a **strict 1:1 relationship** with it (`Fait_Suivi_Terrain`, `Fait_Qualite`) each representing the current monitoring/quality state of a unit, not an event history. A seventh dimension (`Dim_Superviseur`) frames `Dim_Region`, and an additional fact table (`Fait_Allocation_Ressources`) links logistical resources to the region.
 
 ![Star schema](images/star-schema.png)
 
@@ -102,4 +102,4 @@ Star schema: `Dim_Unite_Enquetee` is the **central filter table**, surrounded by
 
 ## 2.7 End-of-phase deliverable
 
-Complete data schema (9 tables), with cardinalities specified, justified, and constrained (UNIQUE where 1:1 is required), ready for translation into SQL DDL — see the corrected star schema diagram above.
+Complete data schema (9 tables), with cardinalities specified, justified, and constrained (UNIQUE where 1:1 is required), ready for translation into SQL DDL.
