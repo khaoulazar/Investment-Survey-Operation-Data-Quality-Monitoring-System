@@ -102,4 +102,4 @@ Schéma en étoile : `Dim_Unite_Enquetee` est la **table de filtre centrale**, e
 
 ## 2.7 Livrable de fin de phase
 
-Schéma de données complet (9 tables), cardinalités précisées, justifiées et contraintes (UNIQUE où le 1:1 est requis), prêt pour traduction en DDL SQL — voir le diagramme en étoile corrigé ci-dessus.
+Schéma de données complet (9 tables), cardinalités précisées, justifiées et contraintes (UNIQUE où le 1:1 est requis), prêt pour traduction en DDL SQL.
