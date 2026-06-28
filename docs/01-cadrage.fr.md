@@ -9,8 +9,8 @@ Avant toute modélisation de données, cette phase vise à traduire les compéte
 | Paramètre | Valeur |
 |---|---|
 | Objet | Système de suivi et de contrôle qualité d'une enquête administrative |
-| Nature | Projet personnel — méthodologie inspirée de pratiques professionnelles d'enquête statistique |
-| Données | Anonymisées / simulées |
+| Nature | Méthodologie inspirée de pratiques professionnelles d'enquête statistique |
+| Données | Anonymisées 
 | Population couverte | 2 068 unités administratives (CT / EPA / SDL), 12 régions |
 | Type d'opération | Recensement exhaustif — aucune pondération statistique |
 | Durée de référence | 7 mois (01/01/2025 → 01/07/2025) |
@@ -20,8 +20,8 @@ Avant toute modélisation de données, cette phase vise à traduire les compéte
 | Réf. | Exigence | Justification |
 |---|---|---|
 | EX-01 | Modéliser un schéma en étoile normalisé, compatible SQLite et Azure SQL | Data modeling |
-| EX-02 | Calculer un taux de réponse par région | SQL & analyse statistique |
-| EX-03 | Calculer un taux d'imputation par région | SQL & analyse statistique |
+| EX-02 | Calculer le taux de réponse par région | SQL & analyse statistique |
+| EX-03 | Calculer le taux d'imputation par région | SQL & analyse statistique |
 | EX-04 | Détecter les valeurs aberrantes selon deux méthodes distinctes (IQR et Z-score) | SQL & analyse statistique |
 | EX-05 | Classer (ranking) les régions selon la qualité des données | SQL & analyse statistique |
 | EX-06 | Suivre l'évolution du taux de réponse dans le temps | SQL & analyse statistique |
