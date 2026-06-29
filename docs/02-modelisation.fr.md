@@ -2,7 +2,7 @@
 
 ## 2.1 Objectif de la phase
 
-Formaliser, à partir des exigences et décisions actées en Phase 1, un schéma de données complet et contraint : tables, types, clés primaires, clés étrangères, et cardinalités réelles. Le schéma est directement traduisible en DDL SQL (Phase 3), sans colonne manquante ni relation mal définie.
+Formaliser, à partir des exigences et décisions actées en Phase 1, un schéma de données complet et contraint : tables, types, clés primaires, clés étrangères, et cardinalités réelles. Le schéma est  directement traduisible en DDL SQL (Phase 3), sans colonne manquante ni relation mal définie.
 
 ## 2.2 Principe structurant
 
@@ -32,6 +32,7 @@ Schéma en étoile : `Dim_Unite_Enquetee` est la **table de filtre centrale**, e
 
 **Dim_Enqueteur**
 - `agent_id` (PK)
+- `region_id` (FK → Dim_Region) — *ajouté : chaque enquêteur est ancré à une seule région, ce qui empêche de lui assigner des unités d'une autre région*
 - `anciennete_annees`
 - `niveau_experience`
 - `niveau_competence_it`
@@ -82,6 +83,7 @@ Schéma en étoile : `Dim_Unite_Enquetee` est la **table de filtre centrale**, e
 | Relation | Cardinalité | Mécanisme de contrainte |
 |---|---|---|
 | Dim_Superviseur → Dim_Region | 1 — 1 | `UNIQUE(superviseur_id)` sur `Dim_Region` |
+| Dim_Region → Dim_Enqueteur | 1 — * | FK simple (chaque enquêteur ancré à une seule région) |
 | Dim_Region → Dim_Unite_Enquetee | 1 — * | FK simple |
 | Dim_Type_Unite → Dim_Unite_Enquetee | 1 — * | FK simple |
 | Dim_Enqueteur → Dim_Unite_Enquetee | 1 — * | FK simple |
@@ -97,9 +99,12 @@ Schéma en étoile : `Dim_Unite_Enquetee` est la **table de filtre centrale**, e
 |---|---|---|
 | Cardinalité Unité ↔ Suivi terrain / Qualité | 1:1, imposée par `UNIQUE(unite_id)` | Une unité = un état de suivi courant et un indicateur qualité courant, pas un historique |
 | Cardinalité Superviseur ↔ Région | 1:1, imposée par `UNIQUE(superviseur_id)` | Un superviseur ne couvre qu'une seule région (confirmé) |
+| Ancrage enquêteur ↔ région | `region_id` ajouté sur `Dim_Enqueteur` | Empêche qu'un enquêteur soit assigné à des unités de plusieurs régions différentes |
+| Effectifs réels par région | Chiffres réels (tableau EIAP) : unités, enquêteurs, véhicules, tablettes varient par région (ex. Marrakech-Safi : 299 unités / 7 enquêteurs ; Eddakhla-Oued Eddahab : 24 unités / 1 enquêteur) | Remplace l'hypothèse initiale de répartition uniforme |
+| Superviseurs | 12 au total (1 par région, strict 1:1) | Décision actée malgré le tableau source qui n'en compte que 9 (3 régions sans superviseur réel) |
 | Pondération | Aucune colonne de poids de sondage | Recensement exhaustif confirmé en Phase 1 |
 | Lien temporel sur les faits | `date_id` ajouté sur `Fait_Suivi_Terrain` et `Fait_Qualite` | Nécessaire pour EX-06 (tendance dans le temps), absent du schéma initial |
 
 ## 2.7 Livrable de fin de phase
 
-Schéma de données complet (9 tables), cardinalités précisées, justifiées et contraintes (UNIQUE où le 1:1 est requis), prêt pour traduction en DDL SQL.
+Schéma de données complet (9 tables), cardinalités précisées, justifiées et contraintes (UNIQUE où le 1:1 est requis ; ancrage enquêteur-région assuré par FK), prêt pour traduction en DDL SQL — voir le diagramme en étoile corrigé ci-dessus.
