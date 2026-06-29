@@ -23,7 +23,7 @@ Define the technical environment on which the Phase 2 schema will be implemented
 | Enforcing 1:1 at generation time | Exactly one row per `unite_id` in `Fait_Suivi_Terrain` and `Fait_Qualite` | Consistent with the UNIQUE constraint set in Phase 2 |
 | Surveyor ↔ region anchoring at generation time | Each surveyor is attached to a single region at creation; units only draw their agent from surveyors of their own region | Prevents a surveyor from ending up with units across multiple regions |
 | Per-region headcount source | Real EIAP table (human and material resource needs), hardcoded in `REGIONS_DATA` | Replaces a uniform distribution with exact per-region figures (e.g. Marrakech-Safi: 299 units/7 surveyors/7 vehicles/8 tablets; Eddakhla-Oued Eddahab: 24 units/1 surveyor/1 vehicle/1 tablet) |
-| Number of supervisors | 12 total (1 per region, strict 1:1) | Decision made despite the source table listing only 9 (3 regions with no real supervisor) |
+| Number of supervisors | 12 total (1 per region, strict 1:1) | Each supervisor is assigned to the region where they reside |
 | Simulated anomaly rate | **~10–15%** of units with an aberrant `ecart_gps_metres` or a high `nb_erreurs_capi` | Moderate: enough to demonstrate IQR/Z-score detection (REQ-04) without overly distorting overall KPIs |
 | Simulated non-response rate | **~10%** of units with `non_reponse` = Yes | Realistic for a mandatory administrative survey, without dominating the indicators |
 | Reproducibility | `random.seed(42)` fixed in the script | Ensures every run produces exactly the same data, for comparable analyses |
