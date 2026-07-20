@@ -1,3 +1,5 @@
+## Metadata Extraction Methodology
+
 The metadata ( tables, columns, measures and relationships) was extracted directly from the Power BI model using the
 DAX functions `INFO.VIEW.TABLES()`, `INFO.VIEW.COLUMNS()`, and
 `INFO.VIEW.RELATIONSHIPS()`, ensuring the documentation stays accurate to
