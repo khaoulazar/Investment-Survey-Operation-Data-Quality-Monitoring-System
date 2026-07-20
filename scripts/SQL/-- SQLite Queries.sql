@@ -360,3 +360,8 @@ ORDER BY unite_id;
 -- jai ajouté la modalité "en cours" ds fait_suivi terrain ds etat questionnaire et lancé python 
 -- test
 SELECT DISTINCT etat_questionnaire FROM Fait_Suivi_Terrain;
+-- the solution is to replace NULL and '' with "en cours"
+UPDATE Fait_Suivi_Terrain
+SET etat_questionnaire = "En cours"
+WHERE etat_questionnaire IS NULL OR TRIM(etat_questionnaire) = '';
+SELECT DISTINCT etat_questionnaire FROM Fait_Suivi_Terrain;
