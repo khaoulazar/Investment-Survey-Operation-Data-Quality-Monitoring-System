@@ -1,4 +1,4 @@
-## Méthodologie d'extraction 
+## Méthodologie d'extraction des métadonnées
 
 Le schéma des tables , colonnes , mesures et relations a été extrait directement du modèle Power BI via les
 fonctions DAX `INFO.VIEW.TABLES()`, `INFO.VIEW.COLUMNS()` et
