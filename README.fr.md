@@ -3,8 +3,15 @@
 ---
 
 # Système de suivi et de contrôle qualité de la collecte des données de l'enquête sur l'investissement public
+## Stack technique
 
-Système de suivi et de contrôle qualité de bout en bout pour une enquête administrative portant sur 2 068 unités — conception d'un schéma en étoile, détection de valeurs aberrantes (IQR/Z-score), indice composite de qualité, et tableau de bord Power BI.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+
+Système de suivi et de contrôle qualité de bout en bout pour une enquête administrative portant sur 2 068 unités — conception d'un schéma en étoile, détection de valeurs aberrantes et tableau de bord Power BI.
 
 ## Présentation générale du projet
 
