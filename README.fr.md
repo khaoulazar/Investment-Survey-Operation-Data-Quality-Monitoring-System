@@ -21,7 +21,7 @@ La démarche est structurée en huit phases successives, chacune produisant un l
 <br>**1-Cadrage:** traduit les compétences à démontrer en exigences fonctionnelles précises et traçables.
 <br>**2-Modélisation des données:** construit, à partir de ces exigences, un schéma en étoile normalisé compatible SQLite et Azure SQL Database.
 <br>**3-Architecture technique:** définit l'infrastructure de collecte, de stockage et d'ingestion des données. 
-<br>**4-ETL et contrôle qualité:** met en œuvre les règles de validation, la détection des valeurs aberrantes par IQR et Z-score, et le calcul de l'indice composite de qualité.
+<br>**4-ETL et contrôle qualité:** met en œuvre les règles de validation et la détection des valeurs aberrantes.
 <br>**5-Indicateurs de pilotage:** formalise les KPIs de couverture, de vélocité et de qualité. 
 <br>**6-Visualisation Power BI:** restitue l'ensemble sous forme de tableau de bord interactif à trois niveaux de lecture.
 <br>**7-Automatisation et alertes:** introduit des mécanismes de notification et un score de risque par unité. 
